@@ -41,16 +41,10 @@
     function uploadFile(bloburl, signature) {        
         var xhr = new XMLHttpRequest();
         fileData = document.getElementById('fileToUpload').files[0];
-        // authHeader = "SharedKey " + account + ":" + signature;
-        // xhr.upload.addEventListener("progress", uploadProgress, false);
-        // xhr.addEventListener("load", uploadComplete, false);
-        // xhr.addEventListener("error", uploadFailed, false);
-        // xhr.addEventListener("abort", uploadCanceled, false);
         xhr.open("PUT", bloburl + "?" + signature);
         xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
         xhr.setRequestHeader('Content-Length', fileData.size);
         xhr.setRequestHeader('x-ms-blob-content-type', fileData.type);
-        // xhr.setRequestHeader('Authorization', authHeader);
         result = xhr.send(fileData);
     }
 </script>
