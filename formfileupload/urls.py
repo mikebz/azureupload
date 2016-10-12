@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^/signature/[\w\-. ]+$', views.signature, name='signature')
+    url(r'^signature/(?P<file_name>[\w\-\. ]+)$', views.signature, name='signature')
 ]

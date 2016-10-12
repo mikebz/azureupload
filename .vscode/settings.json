@@ -1,0 +1,8 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "python.pythonPath": "${workspaceRoot}/env/bin/python",
+    "python.autoComplete.extraPaths": [
+        "${workspaceRoot}/env/lib/python2.7",
+        "${workspaceRoot}/env/lib/python2.7/site-packages"
+    ]
+}
