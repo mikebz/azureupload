@@ -43,7 +43,6 @@
         fileData = document.getElementById('fileToUpload').files[0];
         xhr.open("PUT", bloburl + "?" + signature);
         xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
-        xhr.setRequestHeader('Content-Length', fileData.size);
         xhr.setRequestHeader('x-ms-blob-content-type', fileData.type);
         result = xhr.send(fileData);
     }
