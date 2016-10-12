@@ -11,8 +11,12 @@ azure-nspkg==1.0.0
 azure-servicebus==0.20.1
 azure-servicemanagement-legacy==0.20.2
 azure-storage==0.20.3
+dj-database-url==0.4.1
 Django==1.10.2
 futures==3.0.5
+gunicorn==19.6.0
+psycopg2==2.6.2
 python-dateutil==2.5.3
 requests==2.11.1
 six==1.10.0
+whitenoise==3.2.2

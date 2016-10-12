@@ -26,7 +26,7 @@ SECRET_KEY = 'xa$7fjt(bz_8(0t$9byd)2w)06u(%tiqj89%pxy$slgkzce-=1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -121,6 +121,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 AZURE_ACCOUNT_NAME = os.environ.get("AZURE_ACCOUNT_NAME")
 AZURE_ACCOUNT_KEY = os.environ.get("AZURE_ACCOUNT_KEY")

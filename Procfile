@@ -1,1 +1,1 @@
-web: gunicorn azureupload.wsgi
+web: gunicorn azureupload.wsgi --log-file -
