@@ -38,7 +38,7 @@
             })
     }
     
-    function uploadFile(bloburl, signature) {        
+    function uploadFile(bloburl, signature) {   
         var xhr = new XMLHttpRequest();
         fileData = document.getElementById('fileToUpload').files[0];
         xhr.open("PUT", bloburl + "?" + signature);
