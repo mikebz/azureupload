@@ -14,6 +14,13 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 
+def chunked(request):
+    template = loader.get_template('chunked.html')
+    context = {}
+
+    return HttpResponse(template.render(context, request))
+
+
 def signature(request, file_name):
     azure_utils = AzureUtils(settings.AZURE_ACCOUNT_NAME, settings.AZURE_ACCOUNT_KEY)
     signature = azure_utils.generate_access_signature(file_name)
