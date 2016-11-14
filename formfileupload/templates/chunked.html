@@ -67,7 +67,7 @@
         // this function will upload the fileData to a block
         // one at a time.
         function uploadChunk(data) {
-            var uri = bloburl + "?" + signature + '&blockid=BLOCK' + currentPosition;
+            var uri = bloburl + "?" + signature + '&comp=block&blockid=' + btoa('BLOCK' + currentPosition);
             console.log('uploadChunk uri: '+ uri);
 
             var xhr = new XMLHttpRequest();
@@ -111,7 +111,8 @@
             // put together a requestBody of all the blocks that need to be committed
             var requestBody = "<?xml version=\"1.0\" encoding=\"utf-8\"?><BlockList>";
             for (var i = 0; i < numberOfBlocks; i++) {
-                requestBody += "<Latest>BLOCK" + i + "</Latest>";
+                var blockId = btoa("BLOCK" + i);
+                requestBody += "<Latest>" + blockId + "</Latest>";
             }
             requestBody += "</BlockList>";
             console.log('commitBlocks XML:' + requestBody);
