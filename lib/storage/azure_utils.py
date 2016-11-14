@@ -22,7 +22,7 @@ class AzureUtils:
         )
 
         expire_at = datetime.utcnow()
-        expire_at = expire_at + timedelta(seconds=30)
+        expire_at = expire_at + timedelta(seconds=600)
 
         permissions = ContainerPermissions.READ | ContainerPermissions.WRITE | ContainerPermissions.DELETE | ContainerPermissions.LIST
 

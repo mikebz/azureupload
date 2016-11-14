@@ -14,6 +14,9 @@
 </form>
 
 <script>
+    const blockSize = 256 * 1024;
+    const maxRetries = 10;
+
     function startUpload() {   
         var fileName = guid();
 
@@ -27,13 +30,112 @@
     }
     
     function uploadFile(bloburl, signature) {   
-        var xhr = new XMLHttpRequest();
-        fileData = document.getElementById('fileToUpload').files[0];
-        xhr.open("PUT", bloburl + "?" + signature);
-        xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
-        xhr.setRequestHeader('x-ms-blob-content-type', fileData.type);
-        result = xhr.send(fileData);
+        selectedFile = document.getElementById('fileToUpload').files[0];
+        var fileSize = selectedFile.size;
+        var currentPosition = 0;
+        var tries = 0;
+
+        console.log( "selected file size:" + fileSize );
+
+        // determine whether or not we need to add 
+        // an extra block by seeing if we have something 
+        // outside of our chunk boundary
+        var addLastBlock = 0;
+        if (fileSize % blockSize != 0) {
+            addLastBlock = 1;
+        }
+        const numberOfBlocks = parseInt(fileSize / blockSize, 10) + addLastBlock;
+        console.log( "number of blocks: " + numberOfBlocks );
+        readNextSlice();
+
+        //
+        // read the file blocks one at a time.
+        // it relies on the currentPosition to be updated
+        // prior to the call
+        function readNextSlice() {
+            var fileData = selectedFile.slice(currentPosition * blockSize, (currentPosition + 1) * blockSize );
+            var reader = new FileReader();
+            reader.onloadend = function (event) {
+                if (event.target.readyState == FileReader.DONE) {
+                    var requestData = new Uint8Array(event.target.result);
+                    uploadChunk(requestData);
+                }
+            }
+            reader.readAsArrayBuffer(fileData);
+        }
+
+        // this function will upload the fileData to a block
+        // one at a time.
+        function uploadChunk(data) {
+            var uri = bloburl + "?" + signature + '&blockid=BLOCK' + currentPosition;
+            console.log('uploadChunk uri: '+ uri);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("PUT", uri);
+            xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
+            xhr.setRequestHeader('x-ms-blob-content-type', selectedFile.type);
+
+            xhr.onreadystatechange = function() {
+                if( xhr.readyState != 4 ) return;
+                console.log('DONE event for ' + currentPosition + " status: " + xhr.status );
+
+                // if we are not getting a positive response back
+                // we are goig to retry
+                if( xhr.status != 200 && xhr.status != 201 ) {
+                    if( ++tries >= maxRetries ) return;
+                    uploadChunk(data);
+                    return;
+                }
+
+                // this only happens if we successfully put the block 
+                // into storage
+                currentPosition++;                 
+                if( currentPosition < numberOfBlocks) 
+                    readNextSlice();
+                else 
+                    commitBlocks();
+
+            }
+            xhr.send(data);
+        }
+
+        // commit all the blocks 
+        // so that we have a complete blob
+        // this is only called when the upload was 
+        // successful for all the blocks prior
+        function commitBlocks() {
+            // reference: https://msdn.microsoft.com/en-us/library/azure/dd179467.aspx
+            var uri = bloburl + "?" + signature + '&comp=blocklist';
+            console.log('commitBlocks uri: '+ uri);
+
+            // put together a requestBody of all the blocks that need to be committed
+            var requestBody = "<?xml version=\"1.0\" encoding=\"utf-8\"?><BlockList>";
+            for (var i = 0; i < numberOfBlocks; i++) {
+                requestBody += "<Latest>BLOCK" + i + "</Latest>";
+            }
+            requestBody += "</BlockList>";
+            console.log('commitBlocks XML:' + requestBody);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("PUT", uri);
+            xhr.setRequestHeader('x-ms-blob-content-type', selectedFile.type);
+
+            xhr.onreadystatechange = function() {
+                if( xhr.readyState != 4 ) return;
+                console.log("DONE event for commitBlocks, status: " + xhr.status );
+                // if we are not getting a positive response back
+                // we are goig to retry
+                if( xhr.status != 200 && xhr.status != 201 ) {
+                    if( ++tries >= maxRetries ) return;
+                    commitBlocks();
+                }
+            }
+            xhr.send(requestBody);
+        }
+
     }
+
+
 </script>
 
 </body>
