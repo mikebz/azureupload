@@ -1,0 +1,10 @@
+// taken from : http://stackoverflow.com/questions/2998784/how-to-output-integers-with-leading-zeros-in-javascript
+function pad(
+  a, // the number to convert 
+  b // number of resulting characters
+){
+  return (
+    1e15 + a + // combine with large number
+    "" // convert to string
+  ).slice(-b) // cut leading "1"
+}

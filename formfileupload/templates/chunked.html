@@ -4,6 +4,7 @@
     <head>
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script type="text/javascript" src="{% static "formfileupload/js/guid.js" %}"></script>
+        <script type="text/javascript" src="{% static "formfileupload/js/pad.js" %}"></script>
     </head>
 <body>
 
@@ -14,7 +15,7 @@
 </form>
 
 <script>
-    const blockSize = 256 * 1024;
+    const blockSize = 512 * 1024;
     const maxRetries = 10;
 
     function startUpload() {   
@@ -67,7 +68,7 @@
         // this function will upload the fileData to a block
         // one at a time.
         function uploadChunk(data) {
-            var uri = bloburl + "?" + signature + '&comp=block&blockid=' + btoa('BLOCK' + currentPosition);
+            var uri = bloburl + "?" + signature + '&comp=block&blockid=' + btoa('BLOCK' + pad(currentPosition, 7));
             console.log('uploadChunk uri: '+ uri);
 
             var xhr = new XMLHttpRequest();
@@ -111,7 +112,7 @@
             // put together a requestBody of all the blocks that need to be committed
             var requestBody = "<?xml version=\"1.0\" encoding=\"utf-8\"?><BlockList>";
             for (var i = 0; i < numberOfBlocks; i++) {
-                var blockId = btoa("BLOCK" + i);
+                var blockId = btoa("BLOCK" + pad(i, 7));
                 requestBody += "<Latest>" + blockId + "</Latest>";
             }
             requestBody += "</BlockList>";
