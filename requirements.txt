@@ -15,6 +15,6 @@ psycopg2==2.6.2
 pyasn1==0.1.9
 pycparser==2.16
 python-dateutil==2.5.3
-requests==2.11.1
+requests==2.20.0
 six==1.10.0
 whitenoise==3.2.2
