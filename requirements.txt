@@ -2,7 +2,7 @@ azure-common==1.1.4
 azure-nspkg==1.0.0
 azure-storage==0.33.0
 cffi==1.8.3
-cryptography==3.3.2
+cryptography==39.0.1
 dj-database-url==0.4.1
 Django==1.11.29
 enum34==1.1.6
