@@ -7,7 +7,7 @@ dj-database-url==0.4.1
 Django==2.2.28
 enum34==1.1.6
 futures==3.0.5
-gunicorn==19.6.0
+gunicorn==23.0.0
 idna==2.1
 ipaddress==1.0.17
 pep8==1.7.0
