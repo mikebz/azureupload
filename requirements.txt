@@ -8,7 +8,7 @@ Django==4.2.22
 enum34==1.1.6
 futures==3.0.5
 gunicorn==23.0.0
-idna==2.1
+idna==3.7
 ipaddress==1.0.17
 pep8==1.7.0
 psycopg2==2.6.2
