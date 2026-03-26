@@ -12,7 +12,7 @@ idna==3.7
 ipaddress==1.0.17
 pep8==1.7.0
 psycopg2==2.6.2
-pyasn1==0.1.9
+pyasn1==0.6.3
 pycparser==2.16
 python-dateutil==2.5.3
 requests==2.33.0
